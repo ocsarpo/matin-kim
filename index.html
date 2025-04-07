@@ -232,11 +232,43 @@
             margin: auto;
             display: block;
             max-width: 90%;
-            max-height: 90vh;
+            max-height: 80vh;
             position: absolute;
-            top: 50%;
+            top: 45%;
             left: 50%;
             transform: translate(-50%, -50%);
+        }
+        .modal-info {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 15px 20px;
+            border-radius: 8px;
+            max-width: 90%;
+            width: 500px;
+            margin-bottom: 20px;
+        }
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+            text-align: center;
+        }
+        .modal-price-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
         }
         .close {
             position: absolute;
@@ -1512,25 +1544,44 @@
     <div id="imageModal" class="modal">
         <span class="close">&times;</span>
         <img class="modal-content" id="modalImage">
+        <div class="modal-info" id="modalInfo">
+            <div class="modal-title" id="modalTitle"></div>
+            <div class="modal-price-container" id="modalPriceContainer"></div>
+            <div class="modal-buttons" id="modalButtons"></div>
+        </div>
     </div>
 
     <script>
         // 모달 관련 요소
         const modal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImage');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalPriceContainer = document.getElementById('modalPriceContainer');
+        const modalButtons = document.getElementById('modalButtons');
         const closeBtn = document.getElementsByClassName('close')[0];
 
         // 모든 제품 이미지 컨테이너에 클릭 이벤트 추가
         document.querySelectorAll('.product-image-container').forEach(container => {
             container.addEventListener('click', function(event) {
-                // 사이즈 가이드 버튼이나 줌 아이콘을 클릭했을 경우 이벤트 버블링 방지
-                if (event.target.classList.contains('size-guide-icon') || event.target.classList.contains('zoom-icon')) {
+                // 사이즈 가이드 버튼을 클릭했을 경우 이벤트 버블링 방지
+                if (event.target.classList.contains('size-guide-icon')) {
                     return;
                 }
                 
+                const productCard = this.closest('.product-card');
                 const img = this.querySelector('.product-image');
+                const title = productCard.querySelector('.product-title').textContent;
+                const priceContainer = productCard.querySelector('.price-container').cloneNode(true);
+                const buttonContainer = productCard.querySelector('.button-container').cloneNode(true);
+                
+                // 모달에 정보 표시
                 modal.style.display = "block";
                 modalImg.src = img.src;
+                modalTitle.textContent = title;
+                modalPriceContainer.innerHTML = '';
+                modalPriceContainer.appendChild(priceContainer);
+                modalButtons.innerHTML = '';
+                modalButtons.appendChild(buttonContainer);
             });
         });
 
@@ -1550,6 +1601,9 @@
                 
                 // 모달 열기
                 modal.style.display = "block";
+                modalTitle.textContent = "사이즈 가이드: " + productTitle;
+                modalPriceContainer.innerHTML = '';
+                modalButtons.innerHTML = '';
                 
                 // 이미지 로드 시도 함수
                 function tryLoadImage(index) {
