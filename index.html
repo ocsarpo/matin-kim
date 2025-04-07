@@ -270,6 +270,32 @@
             gap: 10px;
             margin-top: 15px;
         }
+        .navigation-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.5);
+            color: #333;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+        .navigation-btn:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        #prevBtn {
+            left: 20px;
+        }
+        #nextBtn {
+            right: 20px;
+        }
         .close {
             position: absolute;
             top: 20px;
@@ -1543,6 +1569,8 @@
     <!-- 이미지 모달 -->
     <div id="imageModal" class="modal">
         <span class="close">&times;</span>
+        <button class="navigation-btn" id="prevBtn">&lt;</button>
+        <button class="navigation-btn" id="nextBtn">&gt;</button>
         <img class="modal-content" id="modalImage">
         <div class="modal-info" id="modalInfo">
             <div class="modal-title" id="modalTitle"></div>
@@ -1559,30 +1587,166 @@
         const modalPriceContainer = document.getElementById('modalPriceContainer');
         const modalButtons = document.getElementById('modalButtons');
         const closeBtn = document.getElementsByClassName('close')[0];
-
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        
+        // 현재 표시 중인 상품 인덱스와 모든 상품 카드
+        let currentProductIndex = 0;
+        const allProductCards = document.querySelectorAll('.product-card');
+        
+        // 스와이프 관련 변수
+        let startY = 0;
+        let endY = 0;
+        const minSwipeDistance = 50; // 최소 스와이프 거리 (픽셀)
+        
+        // 상품 정보를 모달에 표시하는 함수
+        function displayProductInModal(productCard, isSwipe = false) {
+            const img = productCard.querySelector('.product-image');
+            const title = productCard.querySelector('.product-title').textContent;
+            const priceContainer = productCard.querySelector('.price-container').cloneNode(true);
+            const buttonContainer = productCard.querySelector('.button-container').cloneNode(true);
+            
+            if (!isSwipe) {
+                modal.style.display = "block";
+                // 모달이 열릴 때 스크롤 막기
+                document.body.style.overflow = 'hidden';
+            }
+            
+            // 이미지와 모달 정보 업데이트
+            modalImg.src = img.src;
+            modalTitle.textContent = title;
+            modalPriceContainer.innerHTML = '';
+            modalPriceContainer.appendChild(priceContainer);
+            modalButtons.innerHTML = '';
+            modalButtons.appendChild(buttonContainer);
+        }
+        
         // 모든 제품 이미지 컨테이너에 클릭 이벤트 추가
-        document.querySelectorAll('.product-image-container').forEach(container => {
+        document.querySelectorAll('.product-image-container').forEach((container, index) => {
             container.addEventListener('click', function(event) {
                 // 사이즈 가이드 버튼을 클릭했을 경우 이벤트 버블링 방지
                 if (event.target.classList.contains('size-guide-icon')) {
                     return;
                 }
                 
+                // 현재 상품 인덱스 설정
+                currentProductIndex = index;
                 const productCard = this.closest('.product-card');
-                const img = this.querySelector('.product-image');
-                const title = productCard.querySelector('.product-title').textContent;
-                const priceContainer = productCard.querySelector('.price-container').cloneNode(true);
-                const buttonContainer = productCard.querySelector('.button-container').cloneNode(true);
                 
-                // 모달에 정보 표시
-                modal.style.display = "block";
-                modalImg.src = img.src;
-                modalTitle.textContent = title;
-                modalPriceContainer.innerHTML = '';
-                modalPriceContainer.appendChild(priceContainer);
-                modalButtons.innerHTML = '';
-                modalButtons.appendChild(buttonContainer);
+                // 모달에 상품 정보 표시
+                displayProductInModal(productCard);
             });
+        });
+        
+        // 스와이프 이벤트 관련 함수
+        function handleTouchStart(e) {
+            startY = e.touches[0].clientY;
+        }
+        
+        function handleTouchMove(e) {
+            if (!startY) return;
+            endY = e.touches[0].clientY;
+        }
+        
+        function handleTouchEnd() {
+            if (!startY || !endY) return;
+            
+            const diffY = startY - endY;
+            if (Math.abs(diffY) < minSwipeDistance) {
+                // 스와이프 거리가 너무 짧으면 무시
+                startY = 0;
+                endY = 0;
+                return;
+            }
+            
+            if (diffY > 0) {
+                // 아래에서 위로 스와이프: 다음 상품
+                showNextProduct();
+            } else {
+                // 위에서 아래로 스와이프: 이전 상품
+                showPreviousProduct();
+            }
+            
+            // 변수 초기화
+            startY = 0;
+            endY = 0;
+        }
+        
+        // 다음 상품 표시
+        function showNextProduct() {
+            if (currentProductIndex < allProductCards.length - 1) {
+                currentProductIndex++;
+            } else {
+                currentProductIndex = 0; // 마지막 상품이면 처음으로 돌아감
+            }
+            
+            displayProductInModal(allProductCards[currentProductIndex], true);
+        }
+        
+        // 이전 상품 표시
+        function showPreviousProduct() {
+            if (currentProductIndex > 0) {
+                currentProductIndex--;
+            } else {
+                currentProductIndex = allProductCards.length - 1; // 첫 상품이면 마지막으로 이동
+            }
+            
+            displayProductInModal(allProductCards[currentProductIndex], true);
+        }
+        
+        // 네비게이션 버튼에 이벤트 리스너 추가
+        prevBtn.addEventListener('click', showPreviousProduct);
+        nextBtn.addEventListener('click', showNextProduct);
+        
+        // 키보드 이벤트 리스너 (왼쪽/오른쪽 화살표 키)
+        document.addEventListener('keydown', function(e) {
+            if (modal.style.display === "block") {
+                if (e.key === "ArrowLeft") {
+                    showPreviousProduct();
+                } else if (e.key === "ArrowRight") {
+                    showNextProduct();
+                } else if (e.key === "Escape") {
+                    closeModal();
+                }
+            }
+        });
+        
+        // 모달을 닫는 함수
+        function closeModal() {
+            modal.style.display = "none";
+            // 모달이 닫힐 때 스크롤 다시 활성화
+            document.body.style.overflow = '';
+        }
+        
+        // 모달에 터치 이벤트 리스너 추가
+        modal.addEventListener('touchstart', handleTouchStart, false);
+        modal.addEventListener('touchmove', handleTouchMove, false);
+        modal.addEventListener('touchend', handleTouchEnd, false);
+        
+        // 마우스 이벤트로 스와이프 구현 (데스크톱 지원)
+        let isMouseDown = false;
+        
+        modal.addEventListener('mousedown', function(e) {
+            isMouseDown = true;
+            startY = e.clientY;
+        });
+        
+        modal.addEventListener('mousemove', function(e) {
+            if (!isMouseDown) return;
+            endY = e.clientY;
+        });
+        
+        modal.addEventListener('mouseup', function() {
+            if (!isMouseDown) return;
+            handleTouchEnd();
+            isMouseDown = false;
+        });
+        
+        modal.addEventListener('mouseleave', function() {
+            if (isMouseDown) {
+                handleTouchEnd();
+                isMouseDown = false;
+            }
         });
 
         // 사이즈 가이드 버튼에 클릭 이벤트 추가
@@ -1635,13 +1799,13 @@
 
         // 닫기 버튼 클릭 이벤트
         closeBtn.addEventListener('click', function() {
-            modal.style.display = "none";
+            closeModal();
         });
 
         // 모달 영역 클릭 시 닫기
         modal.addEventListener('click', function(event) {
             if (event.target === modal) {
-                modal.style.display = "none";
+                closeModal();
             }
         });
     </script>
