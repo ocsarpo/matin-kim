@@ -59,7 +59,6 @@ function createProductCard(product) {
                 </div>
                 <div class="button-container">
                     <a href="${product.detailUrl}" class="product-link" target="_blank">상세</a>
-                    <a href="sms:+82-10-2373-3881?body=${encodeURIComponent(product.smsBody)}" class="contact-link">문자문의</a>
                     <a href="https://open.kakao.com/o/s8Qb36ph" class="kakao-link" target="_blank">카톡문의</a>
                 </div>
             </div>
