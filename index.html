@@ -393,11 +393,69 @@
             text-decoration: none;
             cursor: pointer;
         }
+        
+        /* 세일 배너 스타일 */
+        .sale-banner {
+            width: 100%;
+            height: 50px;
+            overflow: hidden;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24, #ff9ff3, #54a0ff);
+            background-size: 400% 400%;
+            animation: gradientMove 3s ease infinite;
+            margin: 20px 0;
+            position: relative;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .sale-text {
+            white-space: nowrap;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            line-height: 50px;
+            animation: marquee 15s linear infinite;
+            position: absolute;
+            top: 0;
+            display: flex;
+        }
+        
+        .sale-content {
+            padding-right: 0;
+        }
+        
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+        
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Matin Kim</h1>
+        <div class="sale-banner">
+            <div class="sale-text">
+                <span class="sale-content">전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <span class="sale-content">전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp;</span>
+            </div>
+        </div>
         <div class="product-grid">
             <!-- 상품 카드들이 JavaScript에 의해 여기에 동적으로 삽입됩니다 -->
         </div>
