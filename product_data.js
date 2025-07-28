@@ -6,44 +6,14 @@ const productsData = {
         "color": "BLACK",
         "size": "FREE",
         "quantity": 1,
-        "originalPrice": "₩68,00",
+        "originalPrice": "₩68,000",
         "discountPrice": "₩61,200",
         "image": "./images/MK2400TS005MBB.jpg",
         "isSoldOut": false,
         "showSoldOutRibbon": true,
         "detailUrl": "https://matinkim.com/product/detail.html?product_no=5088&cate_no=27&display_group=1",
         "smsBody": "MATIN HERITAGE TOP (BLACK/FREE) 구매 문의합니다.",
-        "ordering": 101
-      },
-      {
-        "id": "matin-kim-logo-coating-jumper-bb",
-        "name": "MATIN KIM LOGO COATING JUMPER",
-        "color": "BLACK",
-        "size": "FREE",
-        "quantity": 0,
-        "originalPrice": "₩162,000",
-        "discountPrice": "₩120,000",
-        "image": "./images/MK2500JP002VBB.jpg",
-        "isSoldOut": true,
-        "showSoldOutRibbon": true,
-        "detailUrl": "https://matinkim.com/product/detail.html?product_no=5038&cate_no=26&display_group=1",
-        "smsBody": "MATIN KIM LOGO COATING JUMPER(BLACK/FREE) 구매 문의합니다.",
-        "ordering": 102
-      },
-      {
-        "id": "matin-kim-logo-coating-jumper-be",
-        "name": "MATIN KIM LOGO COATING JUMPER",
-        "color": "BEIGE",
-        "size": "FREE",
-        "quantity": 0,
-        "originalPrice": "₩162,000",
-        "discountPrice": "₩120,000",
-        "image": "./images/MK2400JP002MBE.jpg",
-        "isSoldOut": true,
-        "showSoldOutRibbon": true,
-        "detailUrl": "https://matinkim.com/product/detail.html?product_no=3341&cate_no=26&display_group=1",
-        "smsBody": "MATIN KIM LOGO COATING JUMPER(BEIGE/FREE) 구매 문의합니다.",
-        "ordering": 103
+        "ordering": -5
       },
       {
         "id": "matin-kim-logo-coating-jumper-gy",
@@ -170,7 +140,7 @@ const productsData = {
         "name": "MADELEINE ROUND BAG",
         "color": "LIGHT BEIGE",
         "size": "FREE",
-        "quantity": 3,
+        "quantity": 2,
         "originalPrice": "₩158,000",
         "discountPrice": "₩120,000",
         "image": "./images/MK2400BG057MLE.jpg",
@@ -271,26 +241,11 @@ const productsData = {
         "ordering": 9
       },
       {
-        "id": "logo-cutted-crop-top-bb-m",
-        "name": "LOGO CUTTED CROP TOP",
-        "color": "BLACK",
-        "size": "M",
-        "quantity": 1,
-        "originalPrice": "₩58,000",
-        "discountPrice": "₩52,200",
-        "image": "./images/MK2400TS002MBB.jpg",
-        "isSoldOut": false,
-        "showSoldOutRibbon": true,
-        "detailUrl": "https://matinkim.com/product/detail.html?product_no=4965&cate_no=27&display_group=1",
-        "smsBody": "LOGO CUTTED CROP TOP(BLACK/M) 구매 문의합니다.",
-        "ordering": 1019
-      },
-      {
         "id": "logo-cutted-crop-top-wh-s",
         "name": "LOGO CUTTED CROP TOP",
         "color": "WHITE",
         "size": "S",
-        "quantity": 3,
+        "quantity": 2,
         "originalPrice": "₩58,000",
         "discountPrice": "₩52,200",
         "image": "./images/MK2400TS002MWH.jpg",
@@ -298,7 +253,7 @@ const productsData = {
         "showSoldOutRibbon": false,
         "detailUrl": "https://matinkim.com/product/detail.html?product_no=4964&cate_no=27&display_group=1",
         "smsBody": "LOGO CUTTED CROP TOP(WHITE/S) 구매 문의합니다.",
-        "ordering": 1020
+        "ordering": -10
       },
       {
         "id": "logo-cutted-layered-top-wh",
@@ -313,29 +268,14 @@ const productsData = {
         "showSoldOutRibbon": true,
         "detailUrl": "https://matinkim.com/product/detail.html?product_no=4962&cate_no=27&display_group=1",
         "smsBody": "LOGO CUTTED LAYERED TOP(WHITE/FREE) 구매 문의합니다.",
-        "ordering": 1021
-      },
-      {
-        "id": "logo-crop-top-bb-m",
-        "name": "LOGO CROP TOP",
-        "color": "BLACK",
-        "size": "M",
-        "quantity": 1,
-        "originalPrice": "₩39,000",
-        "discountPrice": "₩35,100",
-        "image": "./images/MK2400TS041MBB.jpeg",
-        "isSoldOut": false,
-        "showSoldOutRibbon": true,
-        "detailUrl": "https://matinkim.com/product/detail.html?product_no=4132&cate_no=27&display_group=1",
-        "smsBody": "LOGO CROP TOP(BLACK/M) 구매 문의합니다.",
-        "ordering": 1022
+        "ordering": -9
       },
       {
         "id": "logo-crop-top-bb-s",
         "name": "LOGO CROP TOP",
         "color": "BLACK",
         "size": "S",
-        "quantity": 3,
+        "quantity": 2,
         "originalPrice": "₩39,000",
         "discountPrice": "₩35,100",
         "image": "./images/MK2400TS041MBB.jpeg",
@@ -343,7 +283,7 @@ const productsData = {
         "showSoldOutRibbon": false,
         "detailUrl": "https://matinkim.com/product/detail.html?product_no=4132&cate_no=27&display_group=1",
         "smsBody": "LOGO CROP TOP(BLACK/S) 구매 문의합니다.",
-        "ordering": 1023
+        "ordering": -8
       },
       {
         "id": "logo-crop-top-wh-s",
@@ -358,7 +298,7 @@ const productsData = {
         "showSoldOutRibbon": false,
         "detailUrl": "https://matinkim.com/product/detail.html?product_no=4131&cate_no=27&display_group=1",
         "smsBody": "LOGO CROP TOP(WHITE/S) 구매 문의합니다.",
-        "ordering": 1024
+        "ordering": -7
       },
       {
         "id": "logo-top-bb",
@@ -373,7 +313,7 @@ const productsData = {
         "showSoldOutRibbon": false,
         "detailUrl": "https://matinkim.com/product/detail.html?product_no=5319&cate_no=27&display_group=1",
         "smsBody": "LOGO TOP(BLACK/FREE) 구매 문의합니다.",
-        "ordering": 1025
+        "ordering": -6
       },
       {
         "id": "volume-pocket-knit-zip-up-na-s",
