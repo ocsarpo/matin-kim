@@ -55,7 +55,7 @@ const productsData = {
         "discountPrice": "₩113,400",
         "image": "./images/MK2400JP002MNA.jpg",
         "isSoldOut": false,
-        "showSoldOutRibbon": false,
+        "showSoldOutRibbon": true,
         "detailUrl": "https://matinkim.com/product/detail.html?product_no=3340&cate_no=26&display_group=1",
         "smsBody": "MATIN KIM LOGO COATING JUMPER(NAVY/FREE) 구매 문의합니다.",
         "ordering": 3
