@@ -253,7 +253,7 @@ const productsData = {
         "showSoldOutRibbon": false,
         "detailUrl": "https://matinkim.com/product/detail.html?product_no=4964&cate_no=27&display_group=1",
         "smsBody": "LOGO CUTTED CROP TOP(WHITE/S) 구매 문의합니다.",
-        "ordering": -10
+        "ordering": 10
       },
       {
         "id": "logo-cutted-layered-top-wh",
@@ -268,7 +268,7 @@ const productsData = {
         "showSoldOutRibbon": true,
         "detailUrl": "https://matinkim.com/product/detail.html?product_no=4962&cate_no=27&display_group=1",
         "smsBody": "LOGO CUTTED LAYERED TOP(WHITE/FREE) 구매 문의합니다.",
-        "ordering": -9
+        "ordering": 11
       },
       {
         "id": "logo-crop-top-bb-s",
@@ -283,7 +283,7 @@ const productsData = {
         "showSoldOutRibbon": false,
         "detailUrl": "https://matinkim.com/product/detail.html?product_no=4132&cate_no=27&display_group=1",
         "smsBody": "LOGO CROP TOP(BLACK/S) 구매 문의합니다.",
-        "ordering": -8
+        "ordering": 12
       },
       {
         "id": "logo-crop-top-wh-s",
@@ -298,7 +298,7 @@ const productsData = {
         "showSoldOutRibbon": false,
         "detailUrl": "https://matinkim.com/product/detail.html?product_no=4131&cate_no=27&display_group=1",
         "smsBody": "LOGO CROP TOP(WHITE/S) 구매 문의합니다.",
-        "ordering": -7
+        "ordering": 13
       },
       {
         "id": "logo-top-bb",
@@ -313,7 +313,7 @@ const productsData = {
         "showSoldOutRibbon": false,
         "detailUrl": "https://matinkim.com/product/detail.html?product_no=5319&cate_no=27&display_group=1",
         "smsBody": "LOGO TOP(BLACK/FREE) 구매 문의합니다.",
-        "ordering": -6
+        "ordering": 14
       },
       {
         "id": "volume-pocket-knit-zip-up-na-s",
