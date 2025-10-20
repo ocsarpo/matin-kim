@@ -13,7 +13,7 @@ const productsData = {
         "showSoldOutRibbon": true,
         "detailUrl": "https://matinkim.com/product/detail.html?product_no=5088&cate_no=27&display_group=1",
         "smsBody": "MATIN HERITAGE TOP (BLACK/FREE) 구매 문의합니다.",
-        "ordering": -5
+        "ordering": 105
       },
       {
         "id": "matin-kim-logo-coating-jumper-gy",
@@ -28,7 +28,7 @@ const productsData = {
         "showSoldOutRibbon": false,
         "detailUrl": "https://matinkim.com/product/detail.html?product_no=3339&cate_no=26&display_group=1",
         "smsBody": "MATIN KIM LOGO COATING JUMPER(GREY/FREE) 구매 문의합니다.",
-        "ordering": 104
+        "ordering": 1
       },
       {
         "id": "matin-kim-logo-coating-jumper-iv",
@@ -43,14 +43,14 @@ const productsData = {
         "showSoldOutRibbon": false,
         "detailUrl": "https://matinkim.com/product/detail.html?product_no=5039&cate_no=26&display_group=1",
         "smsBody": "MATIN KIM LOGO COATING JUMPER(IVORY/FREE) 구매 문의합니다.",
-        "ordering": 105
+        "ordering": 2
       },
       {
         "id": "matin-kim-logo-coating-jumper-na",
         "name": "MATIN KIM LOGO COATING JUMPER",
         "color": "NAVY",
         "size": "FREE",
-        "quantity": 2,
+        "quantity": 1,
         "originalPrice": "₩162,000",
         "discountPrice": "₩113,400",
         "image": "./images/MK2400JP002MNA.jpg",
@@ -58,7 +58,7 @@ const productsData = {
         "showSoldOutRibbon": false,
         "detailUrl": "https://matinkim.com/product/detail.html?product_no=3340&cate_no=26&display_group=1",
         "smsBody": "MATIN KIM LOGO COATING JUMPER(NAVY/FREE) 구매 문의합니다.",
-        "ordering": 106
+        "ordering": 3
       },
       {
         "id": "matin-kim-logo-coating-jumper-pk",
@@ -73,7 +73,7 @@ const productsData = {
         "showSoldOutRibbon": false,
         "detailUrl": "https://matinkim.com/product/detail.html?product_no=5125&cate_no=26&display_group=1",
         "smsBody": "MATIN KIM LOGO COATING JUMPER(PINK/FREE) 구매 문의합니다.",
-        "ordering": 107
+        "ordering": 4
       },
       {
         "id": "accordion-wallet-sv",
