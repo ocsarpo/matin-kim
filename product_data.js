@@ -80,7 +80,7 @@ const productsData = {
         "name": "ACCORDION WALLET",
         "color": "SILVER",
         "size": "FREE",
-        "quantity": 3,
+        "quantity": 1,
         "originalPrice": "₩88,000",
         "discountPrice": "₩61,600",
         "image": "./images/MK2400WL001MSV.jpg",
@@ -89,21 +89,6 @@ const productsData = {
         "detailUrl": "https://matinkim.com/product/detail.html?product_no=3029&cate_no=167&display_group=1",
         "smsBody": "ACCORDION WALLET(SILVER/FREE) 구매 문의합니다.",
         "ordering": 108
-      },
-      {
-        "id": "accordion-wallet-wh",
-        "name": "ACCORDION WALLET",
-        "color": "WHITE",
-        "size": "FREE",
-        "quantity": 1,
-        "originalPrice": "₩88,000",
-        "discountPrice": "₩61,600",
-        "image": "./images/MK2400WL001MWH.jpg",
-        "isSoldOut": false,
-        "showSoldOutRibbon": true,
-        "detailUrl": "https://matinkim.com/product/detail.html?product_no=2163&cate_no=167&display_group=1",
-        "smsBody": "ACCORDION WALLET(WHITE/FREE) 구매 문의합니다.",
-        "ordering": 109
       },
       {
         "id": "baby-sporty-tote-bag-lg",
