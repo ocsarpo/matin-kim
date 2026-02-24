@@ -85,7 +85,7 @@ const productsData = {
         "discountPrice": "₩61,600",
         "image": "./images/MK2400WL001MSV.jpg",
         "isSoldOut": false,
-        "showSoldOutRibbon": false,
+        "showSoldOutRibbon": true,
         "detailUrl": "https://matinkim.com/product/detail.html?product_no=3029&cate_no=167&display_group=1",
         "smsBody": "ACCORDION WALLET(SILVER/FREE) 구매 문의합니다.",
         "ordering": 108
