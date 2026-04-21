@@ -229,22 +229,41 @@ function renderSummary() {
 let currentStep = 1;
 const TOTAL_STEPS = 6;
 
+function isMobileLayout() {
+  return window.matchMedia('(max-width: 860px)').matches;
+}
+
 function goToStep(n) {
   n = Math.max(1, Math.min(TOTAL_STEPS, n));
   currentStep = n;
   const track = document.getElementById('stageTrack');
   const stage = document.getElementById('stage');
+  const mobile = isMobileLayout();
+
   if (track && stage) {
-    const w = stage.offsetWidth;
-    stage.style.setProperty('--stage-w', w + 'px');
-    track.style.transform = `translateX(-${(n-1) * w}px)`;
-  }
-  // scroll stage into view if we're above it (e.g. coming from hero)
-  const wrap = document.getElementById('stageWrap');
-  if (wrap) {
-    const rect = wrap.getBoundingClientRect();
-    if (rect.top > 40 || rect.top < -40) {
-      window.scrollTo({ top: wrap.offsetTop, behavior: 'smooth' });
+    if (mobile) {
+      // On mobile we stack steps vertically — clear any translate from desktop
+      track.style.transform = '';
+      stage.style.removeProperty('--stage-w');
+      // Scroll the target step into view
+      const target = document.getElementById('step-' + n);
+      if (target) {
+        const navH = 57 + 64; // top nav + sticky step strip
+        const y = target.getBoundingClientRect().top + window.pageYOffset - navH;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    } else {
+      const w = stage.offsetWidth;
+      stage.style.setProperty('--stage-w', w + 'px');
+      track.style.transform = `translateX(-${(n-1) * w}px)`;
+      // scroll stage into view if we're above it (e.g. coming from hero)
+      const wrap = document.getElementById('stageWrap');
+      if (wrap) {
+        const rect = wrap.getBoundingClientRect();
+        if (rect.top > 40 || rect.top < -40) {
+          window.scrollTo({ top: wrap.offsetTop, behavior: 'smooth' });
+        }
+      }
     }
   }
   try { history.replaceState(null, '', '#step-' + n); } catch(e) {}
@@ -394,6 +413,35 @@ document.getElementById('stageNext')?.addEventListener('click', () => {
   if (currentStep < getMaxReachable()) goToStep(currentStep + 1);
 });
 window.addEventListener('resize', () => goToStep(currentStep));
+
+// Mobile: when user scrolls, update which step is "active" in the top strip
+(function setupMobileScrollSpy(){
+  const steps = [];
+  for (let i = 1; i <= TOTAL_STEPS; i++) {
+    const el = document.getElementById('step-' + i);
+    if (el) steps.push({ n: i, el });
+  }
+  if (!steps.length) return;
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!isMobileLayout()) return;
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      ticking = false;
+      const probe = window.innerHeight * 0.4;
+      let best = steps[0].n;
+      for (const s of steps) {
+        const r = s.el.getBoundingClientRect();
+        if (r.top <= probe) best = s.n;
+      }
+      if (best !== currentStep) {
+        currentStep = best;
+        renderNav();
+      }
+    });
+  }, { passive: true });
+})();
 
 // Keyboard arrows when stage is visible
 document.addEventListener('keydown', (e) => {
