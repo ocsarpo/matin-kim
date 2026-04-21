@@ -6,207 +6,88 @@
 <title>마뗑킴 옷하고 가방 팔아요</title>
 <link rel="icon" href="./images/cat.ico" type="image/x-icon">
 <meta property="og:image" content="https://hello-matin.r-e.kr/images/cat.png">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=2">
+<link rel="stylesheet" href="catalog.css?v=4">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 </head>
-<body>
+<body class="catalog-body">
 
-<!-- ========== NAV ========== -->
 <nav class="nav">
-  <div class="nav__brand">hello<b>Matin</b>.</div>
+  <a class="nav__brand" href="index.html">hello<b>Matin</b>.</a>
   <div class="nav__links">
-    <a href="#">OUTER</a>
-    <a href="#">TOP</a>
-    <a href="#">DENIM</a>
-    <a href="#">BAG</a>
-    <a href="#">SALE</a>
+    <a href="index.html" class="active">CATALOG</a>
+    <a href="#">ABOUT</a>
   </div>
-  <div class="nav__cart"><span class="dot"></span>CART · 0</div>
 </nav>
 
-<!-- ========== HERO ========== -->
-<section class="hero" data-screen-label="00 Hero">
-  <div class="hero__meta">
-    <span>SS26 / Private Resale</span>
-    <span><b>●</b> 30% OFF · ALL ITEMS</span>
+<!-- Catalog Header -->
+<header class="cat-hero" data-screen-label="00 Catalog Hero">
+  <div class="cat-hero__meta">
+    <span>Catalog / All Items</span>
+    <span><b>●</b> 30% OFF · ALL</span>
   </div>
-  <h1 class="hero__title">
-    BUY<br>MATIN.
-    <span class="ko">단 한 벌씩 — 다섯 단계만에 당신 품으로.</span>
-  </h1>
-  <div class="hero__sub">
-    <p class="hero__desc">
-      개인 소장 중인 마뗑킴 제품을 정가 대비 <b style="color:var(--accent)">30% 할인</b>된 가격으로
-      공개합니다. 컬렉션 → 제품 → 컬러 → 사이즈 → 수량, 다섯 번의 선택으로 끝나요.
-      모든 옵션은 오른쪽 아래에 실시간으로 업데이트됩니다.
+  <h1 class="cat-hero__title">전체<br>컬렉션.</h1>
+  <div class="cat-hero__row">
+    <p class="cat-hero__desc">
+      개인이 소장하던 마뗑킴 제품 전체 목록입니다. 컬렉션·가격·재고 기준으로 필터링하고,
+      마음에 드는 제품을 찾으면 구매 플로우로 이동해 옵션을 구성할 수 있어요.
     </p>
-    <div class="hero__cta">
-      <a href="#step-1" class="hero__cta-btn">
-        START BUYING <span class="arrow">→</span>
-      </a>
+    <div class="cat-hero__stats" id="catStats">
+      <div class="stat"><span class="k">TOTAL</span><span class="v" id="statTotal">—</span></div>
+      <div class="stat"><span class="k">COLLECTIONS</span><span class="v">04</span></div>
+      <div class="stat"><span class="k">IN STOCK</span><span class="v" id="statStock">—</span></div>
+      <div class="stat"><span class="k">FROM</span><span class="v" id="statFrom">—</span></div>
     </div>
   </div>
-</section>
+</header>
 
-<!-- ========== PROGRESS ========== -->
-<div class="progress" id="progress">
-  <div class="progress__inner">
-    <div class="progress__step" data-step="1"><span class="num">1</span>Collection</div>
-    <div class="progress__divider"></div>
-    <div class="progress__step" data-step="2"><span class="num">2</span>Product</div>
-    <div class="progress__divider"></div>
-    <div class="progress__step" data-step="3"><span class="num">3</span>Color</div>
-    <div class="progress__divider"></div>
-    <div class="progress__step" data-step="4"><span class="num">4</span>Size</div>
-    <div class="progress__divider"></div>
-    <div class="progress__step" data-step="5"><span class="num">5</span>Quantity</div>
-    <div class="progress__divider"></div>
-    <div class="progress__step" data-step="6"><span class="num">6</span>Review</div>
+<!-- Toolbar -->
+<div class="cat-toolbar" id="catToolbar">
+  <div class="cat-toolbar__inner">
+    <div class="cat-filters" id="catFilters">
+      <button class="chip active" data-filter="collection" data-value="all">ALL <span id="countAll"></span></button>
+      <button class="chip" data-filter="collection" data-value="outer">OUTER <span id="countOuter"></span></button>
+      <button class="chip" data-filter="collection" data-value="top">TOP <span id="countTop"></span></button>
+      <button class="chip" data-filter="collection" data-value="denim">DENIM <span id="countDenim"></span></button>
+      <button class="chip" data-filter="collection" data-value="bag">BAG <span id="countBag"></span></button>
+      <span class="cat-sep"></span>
+      <button class="chip" data-filter="stock" data-value="low">LOW STOCK</button>
+      <button class="chip" data-filter="price" data-value="under100">UNDER ₩100K</button>
+    </div>
+    <div class="cat-sort">
+      <label>SORT</label>
+      <select id="sortSelect">
+        <option value="featured">FEATURED</option>
+        <option value="priceAsc">PRICE ↑</option>
+        <option value="priceDesc">PRICE ↓</option>
+        <option value="name">NAME A–Z</option>
+        <option value="stock">STOCK (MOST)</option>
+      </select>
+      <div class="view-toggle" id="viewToggle">
+        <button class="view-btn active" data-view="grid" aria-label="Grid view">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="0" y="0" width="6" height="6" fill="currentColor"/><rect x="8" y="0" width="6" height="6" fill="currentColor"/><rect x="0" y="8" width="6" height="6" fill="currentColor"/><rect x="8" y="8" width="6" height="6" fill="currentColor"/></svg>
+        </button>
+        <button class="view-btn" data-view="list" aria-label="List view">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="0" y="1" width="14" height="2" fill="currentColor"/><rect x="0" y="6" width="14" height="2" fill="currentColor"/><rect x="0" y="11" width="14" height="2" fill="currentColor"/></svg>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- ========== STEP 1 — COLLECTION ========== -->
-<section class="step" id="step-1" data-screen-label="01 Collection">
-  <div class="step__lead">
-    <div class="step__kicker">Step 01 / Collection</div>
-    <h2 class="step__title">컬렉션을<br><em>고르세요.</em></h2>
-    <p class="step__body">
-      아우터·탑·데님·백 — 네 개의 카테고리 중 오늘 관심 있는 쪽을 먼저 좁혀 주세요.
-      선택한 컬렉션 안의 제품만 다음 단계에 노출됩니다.
-    </p>
-    <div class="step__meta">
-      <span id="collectionTotalMeta"><b>AVAILABLE</b> · — items</span>
-      <span><b>UPDATED</b> · 2026.04.21</span>
-    </div>
+<!-- Catalog Grid -->
+<main class="cat-main" id="catMain" data-view="grid">
+  <div id="catGrid"></div>
+  <div class="cat-empty" id="catEmpty" hidden>
+    <p>해당 조건의 제품이 없어요.</p>
+    <button class="link" onclick="resetFilters()">필터 초기화 →</button>
   </div>
-  <div class="collection-grid" id="collectionGrid">
-    <!-- JS -->
-  </div>
-</section>
+</main>
 
-<!-- ========== STEP 2 — PRODUCT ========== -->
-<section class="step" id="step-2" data-screen-label="02 Product">
-  <div class="step__lead">
-    <div class="step__kicker">Step 02 / Product</div>
-    <h2 class="step__title">어떤 <em>한 벌</em>이<br>필요한가요?</h2>
-    <p class="step__body">
-      선택한 컬렉션의 대표 제품들이에요. 카드를 누르면 컬러 옵션 단계로 이어집니다.
-      "LOW STOCK" 마크는 남은 수량이 1점이라는 뜻이에요.
-    </p>
-    <div class="step__meta">
-      <span id="productMeta1"><b>컬렉션</b> · 먼저 선택해 주세요</span>
-      <span><b>ALL PRICES</b> · 30% 할인 적용가</span>
-    </div>
-  </div>
-  <div class="product-grid" id="productGrid">
-    <!-- JS -->
-  </div>
-</section>
-
-<!-- ========== STEP 3 — COLOR ========== -->
-<section class="step" id="step-3" data-screen-label="03 Color">
-  <div class="step__lead">
-    <div class="step__kicker">Step 03 / Color</div>
-    <h2 class="step__title">컬러는<br><em>어떻게</em>?</h2>
-    <p class="step__body">
-      같은 제품이지만 컬러마다 재고가 달라요. 지금 남아 있는 컬러만 선택 가능합니다.
-    </p>
-    <div class="step__meta">
-      <span id="colorMeta"><b>제품</b> · 선택 필요</span>
-    </div>
-  </div>
-  <div class="option-stack" id="colorList">
-    <!-- JS -->
-  </div>
-</section>
-
-<!-- ========== STEP 4 — SIZE ========== -->
-<section class="step" id="step-4" data-screen-label="04 Size">
-  <div class="step__lead">
-    <div class="step__kicker">Step 04 / Size</div>
-    <h2 class="step__title">사이즈.</h2>
-    <p class="step__body">
-      의류는 S · M · L · FREE 중 재고 있는 옵션만 활성화됩니다.
-      사이즈 가이드가 필요하면 카카오톡으로 문의해 주세요.
-    </p>
-    <div class="step__meta">
-      <span id="sizeMeta"><b>선택 중</b> · —</span>
-    </div>
-  </div>
-  <div class="size-grid" id="sizeGrid">
-    <!-- JS -->
-  </div>
-</section>
-
-<!-- ========== STEP 5 — QUANTITY ========== -->
-<section class="step" id="step-5" data-screen-label="05 Quantity">
-  <div class="step__lead">
-    <div class="step__kicker">Step 05 / Quantity</div>
-    <h2 class="step__title">몇 개<br><em>챙길까요</em>?</h2>
-    <p class="step__body">
-      개인 판매이기 때문에 재고가 한정되어 있어요. 선택한 옵션의 최대 수량을 넘길 수 없습니다.
-    </p>
-    <div class="step__meta">
-      <span id="qtyMeta"><b>재고</b> · —</span>
-    </div>
-  </div>
-  <div class="qty-block">
-    <div class="qty-stepper">
-      <button class="qty-btn" id="qtyMinus">−</button>
-      <div class="qty-display" id="qtyDisplay">1</div>
-      <button class="qty-btn" id="qtyPlus">+</button>
-    </div>
-    <div class="qty-hint">
-      <span class="tag" id="qtyStockTag">남은 재고 —</span>
-      <span>· 직거래 시 택배비 없음</span>
-    </div>
-  </div>
-</section>
-
-<!-- ========== STEP 6 — REVIEW ========== -->
-<section class="step" id="step-6" data-screen-label="06 Review">
-  <div class="step__lead">
-    <div class="step__kicker">Step 06 / Review</div>
-    <h2 class="step__title">마지막으로<br><em>확인</em>하세요.</h2>
-    <p class="step__body">
-      KAKAO 오픈채팅 버튼을 누르면 현재 구성한 옵션이 클립보드에 자동 복사됩니다.
-      채팅방에서 바로 붙여넣어 문의해 주세요. 입금 안내와 배송 방식은 1:1로 드려요.
-    </p>
-    <div class="step__meta">
-      <span><b>결제</b> · 계좌이체 / 카카오페이</span>
-      <span><b>배송</b> · 택배(별도) 또는 직거래(무료)</span>
-    </div>
-  </div>
-  <div class="summary-head">
-    <div class="summary-image" id="summaryImage">
-      <div style="width:100%;height:100%;display:grid;place-items:center;color:var(--muted);font-family:'Space Grotesk';font-size:12px;letter-spacing:0.1em;">PRODUCT IMAGE</div>
-    </div>
-    <div class="summary-details">
-      <div class="summary-row"><span class="summary-row__label">Collection</span><span class="summary-row__value" id="sumCollection">—</span></div>
-      <div class="summary-row"><span class="summary-row__label">Product</span><span class="summary-row__value" id="sumProduct">—</span></div>
-      <div class="summary-row"><span class="summary-row__label">Color</span><span class="summary-row__value" id="sumColor">—</span></div>
-      <div class="summary-row"><span class="summary-row__label">Size</span><span class="summary-row__value" id="sumSize">—</span></div>
-      <div class="summary-row"><span class="summary-row__label">Quantity</span><span class="summary-row__value" id="sumQty">—</span></div>
-      <div class="summary-total">
-        <span class="summary-total__label">TOTAL</span>
-        <span class="summary-total__value" id="sumTotal">₩0<small id="sumOrig">₩0</small></span>
-      </div>
-      <p class="summary-note">
-        · 표기된 금액은 30% 할인이 적용된 가격이며, 최종 금액은 수량 × 단가입니다.<br>
-        · 택배 배송 시 택배비(3,500원~)가 별도 부과됩니다.<br>
-        · 개인 소장품 특성상 택 제거 / 1회 시착 제품이 포함될 수 있어요.
-      </p>
-      <div class="summary-actions">
-        <a class="btn btn--secondary" id="kakaoCta" href="https://open.kakao.com/o/s8Qb36ph" target="_blank" rel="noopener">KAKAO 오픈채팅으로 문의 →</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ========== FOOTER ========== -->
+<!-- Footer -->
 <footer class="foot">
   <div>
     <div class="foot__brand">hello<b>Matin</b>.</div>
@@ -216,43 +97,28 @@
     </p>
   </div>
   <div>
-    <h4>HELP</h4>
+    <h4>PAGES</h4>
     <ul>
-      <li>사이즈 가이드</li>
-      <li>결제 방법</li>
-      <li>배송 안내</li>
-      <li>교환 · 환불</li>
+      <li><a href="index.html">Catalog</a></li>
+      <li><a href="configure.html">Configure</a></li>
     </ul>
   </div>
   <div>
     <h4>CONTACT</h4>
     <ul>
-      <li>카카오톡 오픈채팅</li>
-      <li>문자 문의</li>
-      <li>직거래 안내</li>
+      <li><a href="https://open.kakao.com/o/s8Qb36ph" target="_blank" rel="noopener">카카오톡 오픈채팅</a></li>
+      <li><a href="https://open.kakao.com/o/s8Qb36ph" target="_blank" rel="noopener">직거래 안내</a></li>
     </ul>
   </div>
 </footer>
 
-<!-- ========== STICKY BOTTOM BAR ========== -->
-<div class="stickybar" id="stickybar">
-  <div class="stickybar__inner">
-    <div class="stickybar__summary">
-      <div class="chip empty" data-chip="collection"><span class="k">Collection</span><span class="v">—</span></div>
-      <div class="chip empty" data-chip="product"><span class="k">Product</span><span class="v">—</span></div>
-      <div class="chip empty" data-chip="color"><span class="k">Color</span><span class="v">—</span></div>
-      <div class="chip empty" data-chip="size"><span class="k">Size</span><span class="v">—</span></div>
-      <div class="chip empty" data-chip="qty"><span class="k">Qty</span><span class="v">—</span></div>
-    </div>
-    <div class="stickybar__price">
-      <span class="k">Total</span>
-      <span class="v" id="stickyTotal">₩0</span>
-    </div>
-    <button class="stickybar__cta" id="stickyCta" disabled>Review →</button>
-  </div>
+<!-- Quick View Modal -->
+<div class="qv-modal" id="qvModal">
+  <button class="qv-close" id="qvClose" aria-label="Close">×</button>
+  <div class="qv-content" id="qvContent"></div>
 </div>
 
 <script src="data.js"></script>
-<script src="app.js"></script>
+<script src="catalog.js?v=7"></script>
 </body>
 </html>

@@ -24,8 +24,6 @@ function getSize() {
 // ============ Step 1: Collection ============
 function renderCollections() {
   const grid = document.getElementById('collectionGrid');
-  const totalMeta = document.getElementById('collectionTotalMeta');
-  if (totalMeta) totalMeta.innerHTML = `<b>AVAILABLE</b> · ${PRODUCTS.length} items`;
   grid.innerHTML = COLLECTIONS.map(c => {
     const count = PRODUCTS.filter(p => p.collection === c.id).length;
     const selected = state.collection === c.id ? 'selected' : '';
@@ -49,7 +47,7 @@ function renderCollections() {
       // reset downstream
       state.productId = null; state.colorId = null; state.size = null; state.qty = 1;
       update();
-      setTimeout(() => scrollToStep(2), 300);
+      setTimeout(() => goToStep(2), 300);
     });
   });
 }
@@ -98,7 +96,7 @@ function renderProducts() {
       state.productId = el.dataset.id;
       state.colorId = null; state.size = null; state.qty = 1;
       update();
-      setTimeout(() => scrollToStep(3), 300);
+      setTimeout(() => goToStep(3), 300);
     });
   });
 }
@@ -135,7 +133,7 @@ function renderColors() {
       state.colorId = el.dataset.id;
       state.size = null; state.qty = 1;
       update();
-      setTimeout(() => scrollToStep(4), 300);
+      setTimeout(() => goToStep(4), 300);
     });
   });
 }
@@ -169,7 +167,7 @@ function renderSizes() {
       state.size = el.dataset.size;
       state.qty = 1;
       update();
-      setTimeout(() => scrollToStep(5), 300);
+      setTimeout(() => goToStep(5), 300);
     });
   });
 }
@@ -200,11 +198,13 @@ document.getElementById('qtyPlus').addEventListener('click', () => {
   const s = getSize();
   if (s && state.qty < s.stock) { state.qty++; update(); }
 });
+document.getElementById('qtyNext')?.addEventListener('click', () => goToStep(6));
 
 // ============ Step 6: Summary ============
 function renderSummary() {
   const p = getProduct();
   const c = getColor();
+  const s = getSize();
 
   document.getElementById('sumCollection').textContent =
     state.collection ? COLLECTIONS.find(x=>x.id===state.collection).name : '—';
@@ -225,68 +225,77 @@ function renderSummary() {
   }
 }
 
-// ============ Progress + Sticky bar ============
-function renderProgress() {
-  const steps = document.querySelectorAll('.progress__step');
-  const activeStep = getActiveStep();
-  steps.forEach(el => {
-    const n = +el.dataset.step;
-    el.classList.remove('done', 'active');
-    if (n < activeStep) el.classList.add('done');
-    if (n === activeStep) el.classList.add('active');
-  });
+// ============ Stage navigation (horizontal slide) ============
+let currentStep = 1;
+const TOTAL_STEPS = 6;
+
+function goToStep(n) {
+  n = Math.max(1, Math.min(TOTAL_STEPS, n));
+  currentStep = n;
+  const track = document.getElementById('stageTrack');
+  const stage = document.getElementById('stage');
+  if (track && stage) {
+    const w = stage.offsetWidth;
+    stage.style.setProperty('--stage-w', w + 'px');
+    track.style.transform = `translateX(-${(n-1) * w}px)`;
+  }
+  // scroll stage into view if we're above it (e.g. coming from hero)
+  const wrap = document.getElementById('stageWrap');
+  if (wrap) {
+    const rect = wrap.getBoundingClientRect();
+    if (rect.top > 40 || rect.top < -40) {
+      window.scrollTo({ top: wrap.offsetTop, behavior: 'smooth' });
+    }
+  }
+  try { history.replaceState(null, '', '#step-' + n); } catch(e) {}
+  renderNav();
 }
-function getActiveStep() {
+
+function getMaxReachable() {
+  // how far can the user navigate? allow clicking into next empty step only
   if (!state.collection) return 1;
   if (!state.productId) return 2;
   if (!state.colorId) return 3;
   if (!state.size) return 4;
-  // qty always starts at 1, review once size set
-  return state.qty ? 5 : 5;
+  return 6; // qty defaults to 1, so review is reachable
 }
+
+function renderNav() {
+  const max = getMaxReachable();
+  const p = getProduct();
+  const c = getColor();
+  const vals = {
+    1: state.collection ? COLLECTIONS.find(x=>x.id===state.collection).name : '—',
+    2: p ? p.name.split(' ').slice(0,3).join(' ') : '—',
+    3: c ? c.name : '—',
+    4: state.size || '—',
+    5: (p && state.size) ? (state.qty + ' pc' + (state.qty>1?'s':'')) : '—',
+    6: isComplete() ? 'Ready' : '—',
+  };
+  document.querySelectorAll('.stage-nav__item').forEach(el => {
+    const n = +el.dataset.step;
+    el.classList.toggle('active', n === currentStep);
+    el.classList.toggle('done', n < currentStep && vals[n] !== '—');
+    el.classList.toggle('locked', n > max);
+    const v = el.querySelector('.val');
+    if (v) {
+      v.textContent = vals[n];
+      v.classList.toggle('empty', vals[n] === '—');
+    }
+  });
+  const total = p ? p.discountPrice * state.qty : 0;
+  const totalEl = document.getElementById('navTotal');
+  if (totalEl) totalEl.textContent = fmt(total);
+  const prev = document.getElementById('stagePrev');
+  const next = document.getElementById('stageNext');
+  if (prev) prev.disabled = currentStep <= 1;
+  if (next) next.disabled = currentStep >= max;
+}
+
 function isComplete() {
   return state.collection && state.productId && state.colorId && state.size && state.qty > 0;
 }
 
-function renderSticky() {
-  const bar = document.getElementById('stickybar');
-  const hasAny = state.collection || state.productId || state.colorId || state.size;
-  bar.classList.toggle('show', !!hasAny);
-
-  const p = getProduct();
-  const c = getColor();
-  const chips = {
-    collection: state.collection ? COLLECTIONS.find(x=>x.id===state.collection).name : '—',
-    product: p ? p.name.split(' ').slice(0,3).join(' ') : '—',
-    color: c ? c.name : '—',
-    size: state.size || '—',
-    qty: (p && state.size) ? state.qty : '—',
-  };
-  Object.entries(chips).forEach(([k, v]) => {
-    const chip = bar.querySelector(`[data-chip="${k}"]`);
-    chip.querySelector('.v').textContent = v;
-    chip.classList.toggle('empty', v === '—');
-  });
-
-  const total = p ? p.discountPrice * state.qty : 0;
-  document.getElementById('stickyTotal').textContent = fmt(total);
-
-  const cta = document.getElementById('stickyCta');
-  cta.disabled = !isComplete();
-  cta.textContent = isComplete() ? 'REVIEW & KAKAO 문의 →' : 'KEEP GOING →';
-  cta.onclick = () => scrollToStep(6);
-}
-
-// ============ Scroll ============
-function scrollToStep(n) {
-  const el = document.getElementById('step-' + n);
-  if (!el) return;
-  const offset = 100;
-  window.scrollTo({
-    top: el.getBoundingClientRect().top + window.scrollY - offset,
-    behavior: 'smooth',
-  });
-}
 
 // ============ Master update ============
 function update() {
@@ -296,37 +305,129 @@ function update() {
   renderSizes();
   renderQty();
   renderSummary();
-  renderProgress();
-  renderSticky();
+  renderNav();
 }
 
-// Hero CTA smooth scroll
+const btnBuy = document.getElementById('btnBuy');
+if (btnBuy) btnBuy.addEventListener('click', () => {
+  if (!isComplete()) { alert('모든 옵션을 선택해 주세요.'); return; }
+  alert('정적 목업입니다 — 실제 결제는 연결되어 있지 않아요.');
+});
+
+// ============ Kakao 문의 (copy template + open chat) ============
+const KAKAO_URL = 'https://open.kakao.com/o/s8Qb36ph';
+function buildKakaoMessage() {
+  const p = getProduct();
+  const c = getColor();
+  const coll = state.collection ? COLLECTIONS.find(x => x.id === state.collection) : null;
+  const total = p ? p.discountPrice * state.qty : 0;
+  return (
+    `[helloMatin 문의]\n` +
+    `· 컬렉션: ${coll ? coll.name : ''}\n` +
+    `· 제품: ${p ? p.name : ''}\n` +
+    `· 색상: ${c ? c.name : ''}\n` +
+    `· 사이즈: ${state.size || ''}\n` +
+    `· 수량: ${(p && state.size) ? state.qty : ''}\n` +
+    `· 가격: ${p ? fmt(total) : ''}\n` +
+    `\n문의사항: `
+  );
+}
+async function copyAndOpenKakao(text) {
+  let ok = false;
+  try {
+    await navigator.clipboard.writeText(text);
+    ok = true;
+  } catch (e) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+    } catch (_) { ok = false; }
+  }
+  showToast(ok ? '문의 내용이 복사되었습니다. 카카오톡에 붙여넣어 주세요.' : '복사 실패 — 카카오톡으로 이동합니다.');
+  setTimeout(() => window.open(KAKAO_URL, '_blank', 'noopener'), 500);
+}
+function showToast(msg) {
+  let t = document.getElementById('hmToast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'hmToast';
+    t.className = 'hm-toast';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._to);
+  showToast._to = setTimeout(() => t.classList.remove('show'), 2800);
+}
+const btnKakao = document.getElementById('btnKakao');
+if (btnKakao) btnKakao.addEventListener('click', (e) => {
+  e.preventDefault();
+  copyAndOpenKakao(buildKakaoMessage());
+});
+
+// Hero CTA + any anchor hops
 document.querySelectorAll('a[href^="#step-"]').forEach(a => {
   a.addEventListener('click', (e) => {
     e.preventDefault();
     const n = +a.getAttribute('href').replace('#step-','');
-    scrollToStep(n);
+    goToStep(n);
   });
 });
 
-// KAKAO CTA — copy selection summary to clipboard before opening chat
-document.getElementById('kakaoCta').addEventListener('click', () => {
-  if (!isComplete()) return; // let the link open anyway if user just browses
-  const p = getProduct();
-  const c = getColor();
-  const total = p.discountPrice * state.qty;
-  const lines = [
-    '[구매 문의]',
-    `· 제품: ${p.name}`,
-    `· 컬러: ${c.name}`,
-    `· 사이즈: ${state.size}`,
-    `· 수량: ${state.qty}개`,
-    `· 합계: ${fmt(total)}`,
-  ].join('\n');
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(lines).catch(() => {});
-  }
+// Sidebar nav clicks
+document.querySelectorAll('.stage-nav__item').forEach(el => {
+  el.addEventListener('click', () => {
+    if (el.classList.contains('locked')) return;
+    goToStep(+el.dataset.step);
+  });
 });
+
+// Prev/Next arrows
+document.getElementById('stagePrev')?.addEventListener('click', () => goToStep(currentStep - 1));
+document.getElementById('stageNext')?.addEventListener('click', () => {
+  if (currentStep < getMaxReachable()) goToStep(currentStep + 1);
+});
+window.addEventListener('resize', () => goToStep(currentStep));
+
+// Keyboard arrows when stage is visible
+document.addEventListener('keydown', (e) => {
+  const wrap = document.getElementById('stageWrap');
+  if (!wrap) return;
+  const rect = wrap.getBoundingClientRect();
+  const inView = rect.top < window.innerHeight * 0.5 && rect.bottom > window.innerHeight * 0.3;
+  if (!inView) return;
+  if (e.key === 'ArrowRight' && currentStep < getMaxReachable()) goToStep(currentStep + 1);
+  if (e.key === 'ArrowLeft' && currentStep > 1) goToStep(currentStep - 1);
+});
+
+// Preselect from URL params (e.g. ?product=X&color=Y from catalog)
+(function preselect(){
+  const params = new URLSearchParams(location.search);
+  const pid = params.get('product');
+  const cid = params.get('color');
+  if (!pid) return;
+  const p = PRODUCTS.find(x => x.id === pid);
+  if (!p) return;
+  state.collection = p.collection;
+  state.productId = p.id;
+  if (cid && p.colors.find(x => x.id === cid)) {
+    state.colorId = cid;
+  }
+  // Clear URL so hash-scroll handler doesn't override us
+  try { history.replaceState(null, '', location.pathname); } catch(e) {}
+  // Jump to next un-filled step after initial render
+  const target = state.colorId ? 4 : 3;
+  requestAnimationFrame(() => {
+    update();
+    goToStep(target);
+  });
+})();
 
 // Init
 update();
