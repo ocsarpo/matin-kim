@@ -14,19 +14,77 @@
             font-family: 'Noto Sans KR', sans-serif;
         }
         body {
-            background-color: #f8f8f8;
-            color: #333;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e, #1a0033, #0f0c29);
+            background-size: 400% 400%;
+            animation: bgShift 12s ease infinite;
+            color: #fff;
             line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(2px 2px at 20% 30%, #fff, transparent),
+                radial-gradient(2px 2px at 60% 70%, #ffd700, transparent),
+                radial-gradient(1px 1px at 50% 50%, #fff, transparent),
+                radial-gradient(1px 1px at 80% 10%, #ff69b4, transparent),
+                radial-gradient(2px 2px at 90% 60%, #fff, transparent),
+                radial-gradient(1px 1px at 33% 80%, #00ffff, transparent),
+                radial-gradient(1px 1px at 15% 90%, #ffd700, transparent),
+                radial-gradient(2px 2px at 70% 20%, #fff, transparent);
+            background-size: 200% 200%;
+            animation: sparkle 8s linear infinite;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.7;
+        }
+        @keyframes bgShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes sparkle {
+            0% { background-position: 0% 0%; opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { background-position: 200% 200%; opacity: 0.5; }
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            position: relative;
+            z-index: 2;
         }
         h1 {
             text-align: center;
             margin: 30px 0;
-            font-size: 32px;
+            font-size: 64px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            background: linear-gradient(90deg, #ff00cc, #ffd700, #00ffff, #ff00cc, #ffd700);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: rainbowText 4s ease infinite, neonGlow 2s ease-in-out infinite alternate;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6));
+        }
+        @keyframes rainbowText {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes neonGlow {
+            from { filter: drop-shadow(0 0 10px #ffd700) drop-shadow(0 0 20px #ff00cc); }
+            to { filter: drop-shadow(0 0 25px #00ffff) drop-shadow(0 0 40px #ffd700); }
         }
         .product-grid {
             display: grid;
@@ -34,15 +92,42 @@
             gap: 30px;
         }
         .product-card {
-            background-color: white;
-            border-radius: 10px;
+            background: linear-gradient(145deg, #ffffff, #fff8e1);
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
+            box-shadow:
+                0 0 20px rgba(255, 215, 0, 0.4),
+                0 0 40px rgba(255, 0, 204, 0.2),
+                0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
             margin-bottom: 20px;
+            position: relative;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+        .product-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 2px;
+            background: linear-gradient(135deg, #ffd700, #ff00cc, #00ffff, #ffd700);
+            background-size: 300% 300%;
+            animation: rainbowText 4s ease infinite;
+            -webkit-mask:
+                linear-gradient(#fff 0 0) content-box,
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            z-index: 5;
         }
         .product-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow:
+                0 0 40px rgba(255, 215, 0, 0.8),
+                0 0 80px rgba(255, 0, 204, 0.4),
+                0 15px 50px rgba(0, 0, 0, 0.4);
         }
         /* 품절 상품 스타일 */
         .product-card.sold-out .product-image-container {
@@ -95,13 +180,16 @@
             top: 20px;
             left: -35px;
             transform: rotate(-45deg);
-            background-color: #ff4757;
+            background: linear-gradient(135deg, #ff4757, #ff006e, #ff4757);
+            background-size: 200% 200%;
+            animation: gradientMove 2s ease infinite;
             color: white;
             font-size: 12px;
             font-weight: bold;
             padding: 5px 40px;
             z-index: 10;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 0 15px rgba(255, 0, 110, 0.7), 0 2px 5px rgba(0,0,0,0.3);
+            text-shadow: 0 0 8px rgba(255,255,255,0.5);
         }
         .sold-out-ribbon.ribbon-hide {
             display: none;
@@ -146,18 +234,30 @@
         }
         .product-info {
             padding: 20px;
+            position: relative;
+            z-index: 2;
         }
         .product-title {
-            font-size: 16px;
-            font-weight: 700;
+            font-size: 17px;
+            font-weight: 800;
             margin-bottom: 10px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            background: linear-gradient(90deg, #4a148c, #d64161, #4a148c);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleShimmer 3s linear infinite;
+        }
+        @keyframes titleShimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
         }
         .sold-out-warning {
             display: inline-block;
-            background-color: #ff4757;
+            background: linear-gradient(90deg, #ff4757, #ff006e);
             color: white;
             font-size: 12px;
             font-weight: bold;
@@ -165,6 +265,7 @@
             border-radius: 4px;
             margin-left: 8px;
             vertical-align: middle;
+            box-shadow: 0 0 10px rgba(255, 0, 110, 0.6);
         }
         .product-details {
             margin-bottom: 10px;
@@ -175,9 +276,14 @@
             margin-bottom: 5px;
         }
         .product-price {
-            font-size: 20px;
-            font-weight: 700;
-            color: #d64161;
+            font-size: 22px;
+            font-weight: 900;
+            background: linear-gradient(90deg, #ff0080, #ff8c00, #ff0080);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleShimmer 2s linear infinite;
             margin: 10px 0;
         }
         .button-container {
@@ -188,46 +294,60 @@
         .contact-link {
             display: inline-block;
             text-align: center;
-            background-color: #4CAF50;
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
             color: white;
             text-decoration: none;
             padding: 10px 15px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+            border-radius: 30px;
+            transition: all 0.3s ease;
             flex-grow: 1;
             margin-left: 5px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(67, 233, 123, 0.5);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }
         .contact-link:hover {
-            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(67, 233, 123, 0.8);
+            filter: brightness(1.15);
         }
         .kakao-link {
             display: inline-block;
             text-align: center;
-            background-color: #FEE500;
+            background: linear-gradient(135deg, #FEE500, #FFC700);
             color: #3C1E1E;
             text-decoration: none;
             padding: 10px 15px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+            border-radius: 30px;
+            transition: all 0.3s ease;
             flex-grow: 1;
             margin-left: 5px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(254, 229, 0, 0.5);
         }
         .kakao-link:hover {
-            background-color: #FCCD00;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(254, 229, 0, 0.9);
+            filter: brightness(1.1);
         }
         .product-link {
             display: inline-block;
             text-align: center;
-            background-color: #333;
+            background: linear-gradient(135deg, #434343, #000);
             color: white;
             text-decoration: none;
             padding: 10px 15px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
+            border-radius: 30px;
+            transition: all 0.3s ease;
             white-space: nowrap;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 215, 0, 0.3);
         }
         .product-link:hover {
-            background-color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(255, 215, 0, 0.6);
+            border-color: rgba(255, 215, 0, 0.8);
         }
         .no-image {
             display: flex;
@@ -258,9 +378,14 @@
             display: none;
         }
         .discount-price {
-            font-size: 20px;
-            font-weight: 700;
-            color: #d64161;
+            font-size: 22px;
+            font-weight: 900;
+            background: linear-gradient(90deg, #ff0080, #ff8c00, #ffd700, #ff0080);
+            background-size: 300% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleShimmer 2.5s linear infinite;
         }
         .shipping-info {
             width: 100%;
@@ -397,28 +522,40 @@
         /* 세일 배너 스타일 */
         .sale-banner {
             width: 100%;
-            height: 50px;
+            height: 60px;
             overflow: hidden;
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24, #ff9ff3, #54a0ff);
+            background: linear-gradient(45deg, #ff006e, #fb5607, #ffbe0b, #8338ec, #3a86ff, #ff006e);
             background-size: 400% 400%;
-            animation: gradientMove 3s ease infinite;
+            animation: gradientMove 3s ease infinite, bannerPulse 1.5s ease-in-out infinite;
             margin: 20px 0;
             position: relative;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-radius: 15px;
+            box-shadow:
+                0 0 30px rgba(255, 0, 110, 0.6),
+                0 0 60px rgba(255, 190, 11, 0.4),
+                0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 215, 0, 0.6);
         }
-        
+        @keyframes bannerPulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(255, 0, 110, 0.6), 0 0 60px rgba(255, 190, 11, 0.4); }
+            50% { box-shadow: 0 0 50px rgba(255, 0, 110, 0.9), 0 0 100px rgba(255, 190, 11, 0.7); }
+        }
+
         .sale-text {
             white-space: nowrap;
-            font-size: 24px;
-            font-weight: bold;
+            font-size: 28px;
+            font-weight: 900;
             color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            line-height: 50px;
+            text-shadow:
+                0 0 10px rgba(255, 255, 255, 0.8),
+                0 0 20px rgba(255, 215, 0, 0.8),
+                2px 2px 4px rgba(0,0,0,0.6);
+            line-height: 60px;
             animation: marquee 15s linear infinite;
             position: absolute;
             top: 0;
             display: flex;
+            letter-spacing: 2px;
         }
         
         .sale-content {
