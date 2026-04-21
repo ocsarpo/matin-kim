@@ -1,618 +1,258 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>마뗑킴 옷하고 가방 팔아요</title>
-    <link rel="icon" href="./images/cat.ico" type="image/x-icon">
-    <meta property="og:image" content="https://hello-matin.r-e.kr/images/cat.png">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Noto Sans KR', sans-serif;
-        }
-        body {
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e, #1a0033, #0f0c29);
-            background-size: 400% 400%;
-            animation: bgShift 12s ease infinite;
-            color: #fff;
-            line-height: 1.6;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image:
-                radial-gradient(2px 2px at 20% 30%, #fff, transparent),
-                radial-gradient(2px 2px at 60% 70%, #ffd700, transparent),
-                radial-gradient(1px 1px at 50% 50%, #fff, transparent),
-                radial-gradient(1px 1px at 80% 10%, #ff69b4, transparent),
-                radial-gradient(2px 2px at 90% 60%, #fff, transparent),
-                radial-gradient(1px 1px at 33% 80%, #00ffff, transparent),
-                radial-gradient(1px 1px at 15% 90%, #ffd700, transparent),
-                radial-gradient(2px 2px at 70% 20%, #fff, transparent);
-            background-size: 200% 200%;
-            animation: sparkle 8s linear infinite;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0.7;
-        }
-        @keyframes bgShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        @keyframes sparkle {
-            0% { background-position: 0% 0%; opacity: 0.5; }
-            50% { opacity: 1; }
-            100% { background-position: 200% 200%; opacity: 0.5; }
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            z-index: 2;
-        }
-        h1 {
-            text-align: center;
-            margin: 30px 0;
-            font-size: 64px;
-            font-weight: 900;
-            letter-spacing: 4px;
-            background: linear-gradient(90deg, #ff00cc, #ffd700, #00ffff, #ff00cc, #ffd700);
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: rainbowText 4s ease infinite, neonGlow 2s ease-in-out infinite alternate;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6));
-        }
-        @keyframes rainbowText {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        @keyframes neonGlow {
-            from { filter: drop-shadow(0 0 10px #ffd700) drop-shadow(0 0 20px #ff00cc); }
-            to { filter: drop-shadow(0 0 25px #00ffff) drop-shadow(0 0 40px #ffd700); }
-        }
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        .product-card {
-            background: linear-gradient(145deg, #ffffff, #fff8e1);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow:
-                0 0 20px rgba(255, 215, 0, 0.4),
-                0 0 40px rgba(255, 0, 204, 0.2),
-                0 8px 32px rgba(0, 0, 0, 0.3);
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-            margin-bottom: 20px;
-            position: relative;
-            border: 2px solid transparent;
-            background-clip: padding-box;
-        }
-        .product-card::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            border-radius: 20px;
-            padding: 2px;
-            background: linear-gradient(135deg, #ffd700, #ff00cc, #00ffff, #ffd700);
-            background-size: 300% 300%;
-            animation: rainbowText 4s ease infinite;
-            -webkit-mask:
-                linear-gradient(#fff 0 0) content-box,
-                linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-            z-index: 5;
-        }
-        .product-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow:
-                0 0 40px rgba(255, 215, 0, 0.8),
-                0 0 80px rgba(255, 0, 204, 0.4),
-                0 15px 50px rgba(0, 0, 0, 0.4);
-        }
-        /* 품절 상품 스타일 */
-        .product-card.sold-out .product-image-container {
-            position: relative;
-            pointer-events: none;
-        }
-        .product-card.sold-out .product-image {
-            filter: grayscale(100%);
-            opacity: 0.6;
-        }
-        .product-card.sold-out .product-image-container::after {
-            content: "품절";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 28px;
-            font-weight: bold;
-            color: #ff4757;
-            background-color: rgba(255, 255, 255, 0.7);
-            padding: 10px 20px;
-            border-radius: 5px;
-            z-index: 10;
-        }
-        .product-card.sold-out .size-guide-icon {
-            display: none;
-        }
-        .product-card.sold-out .contact-link,
-        .product-card.sold-out .kakao-link,
-        .product-card.sold-out .product-link {
-            pointer-events: none;
-            opacity: 0.5;
-            background-color: #ccc;
-            color: #666;
-        }
-        .product-card.sold-out .contact-link:hover,
-        .product-card.sold-out .kakao-link:hover,
-        .product-card.sold-out .product-link:hover {
-            background-color: #ccc;
-        }
-        .product-image-container {
-            position: relative;
-            height: 350px;
-            overflow: hidden;
-            cursor: pointer;
-            background-color: #f9f9f9;
-        }
-        .sold-out-ribbon {
-            position: absolute;
-            top: 20px;
-            left: -35px;
-            transform: rotate(-45deg);
-            background: linear-gradient(135deg, #ff4757, #ff006e, #ff4757);
-            background-size: 200% 200%;
-            animation: gradientMove 2s ease infinite;
-            color: white;
-            font-size: 12px;
-            font-weight: bold;
-            padding: 5px 40px;
-            z-index: 10;
-            box-shadow: 0 0 15px rgba(255, 0, 110, 0.7), 0 2px 5px rgba(0,0,0,0.3);
-            text-shadow: 0 0 8px rgba(255,255,255,0.5);
-        }
-        .sold-out-ribbon.ribbon-hide {
-            display: none;
-        }
-        .product-image {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            transition: transform 0.3s ease;
-        }
-        .product-image-container:hover .product-image {
-            transform: scale(1.1);
-        }
-        .zoom-icon {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 14px;
-            opacity: 1;
-            transition: opacity 0.3s ease;
-        }
-        .size-guide-icon {
-            position: absolute;
-            bottom: 10px;
-            right: 50px;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            opacity: 1;
-            transition: opacity 0.3s ease;
-            cursor: pointer;
-        }
-        .product-info {
-            padding: 20px;
-            position: relative;
-            z-index: 2;
-        }
-        .product-title {
-            font-size: 17px;
-            font-weight: 800;
-            margin-bottom: 10px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            background: linear-gradient(90deg, #4a148c, #d64161, #4a148c);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: titleShimmer 3s linear infinite;
-        }
-        @keyframes titleShimmer {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
-        }
-        .sold-out-warning {
-            display: inline-block;
-            background: linear-gradient(90deg, #ff4757, #ff006e);
-            color: white;
-            font-size: 12px;
-            font-weight: bold;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-left: 8px;
-            vertical-align: middle;
-            box-shadow: 0 0 10px rgba(255, 0, 110, 0.6);
-        }
-        .product-details {
-            margin-bottom: 10px;
-        }
-        .product-detail {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-        }
-        .product-price {
-            font-size: 22px;
-            font-weight: 900;
-            background: linear-gradient(90deg, #ff0080, #ff8c00, #ff0080);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: titleShimmer 2s linear infinite;
-            margin: 10px 0;
-        }
-        .button-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
-        }
-        .contact-link {
-            display: inline-block;
-            text-align: center;
-            background: linear-gradient(135deg, #43e97b, #38f9d7);
-            color: white;
-            text-decoration: none;
-            padding: 10px 15px;
-            border-radius: 30px;
-            transition: all 0.3s ease;
-            flex-grow: 1;
-            margin-left: 5px;
-            font-weight: 700;
-            box-shadow: 0 4px 15px rgba(67, 233, 123, 0.5);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-        }
-        .contact-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(67, 233, 123, 0.8);
-            filter: brightness(1.15);
-        }
-        .kakao-link {
-            display: inline-block;
-            text-align: center;
-            background: linear-gradient(135deg, #FEE500, #FFC700);
-            color: #3C1E1E;
-            text-decoration: none;
-            padding: 10px 15px;
-            border-radius: 30px;
-            transition: all 0.3s ease;
-            flex-grow: 1;
-            margin-left: 5px;
-            font-weight: 700;
-            box-shadow: 0 4px 15px rgba(254, 229, 0, 0.5);
-        }
-        .kakao-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(254, 229, 0, 0.9);
-            filter: brightness(1.1);
-        }
-        .product-link {
-            display: inline-block;
-            text-align: center;
-            background: linear-gradient(135deg, #434343, #000);
-            color: white;
-            text-decoration: none;
-            padding: 10px 15px;
-            border-radius: 30px;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            font-weight: 700;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 215, 0, 0.3);
-        }
-        .product-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(255, 215, 0, 0.6);
-            border-color: rgba(255, 215, 0, 0.8);
-        }
-        .no-image {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            width: 100%;
-            color: #999;
-            font-size: 16px;
-            background-color: #eee;
-        }
-        
-        /* 할인가격 스타일 */
-        .price-container {
-            display: flex;
-            align-items: center;
-            margin: 10px 0;
-            flex-wrap: wrap;
-        }
-        .original-price {
-            font-size: 16px;
-            font-weight: 700;
-            color: #999;
-            text-decoration: line-through;
-            margin-right: 10px;
-        }
-        .discount-badge {
-            display: none;
-        }
-        .discount-price {
-            font-size: 22px;
-            font-weight: 900;
-            background: linear-gradient(90deg, #ff0080, #ff8c00, #ffd700, #ff0080);
-            background-size: 300% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: titleShimmer 2.5s linear infinite;
-        }
-        .shipping-info {
-            width: 100%;
-            display: flex;
-            margin-top: 5px;
-            justify-content: flex-end;
-        }
-        .shipping-note {
-            font-size: 11px;
-            color: #999;
-            display: inline-block;
-        }
-        .direct-trade {
-            display: inline-block;
-            font-size: 11px;
-            color: #4CAF50;
-            font-weight: 500;
-            margin-left: 10px;
-        }
-        
-        /* 이미지 모달 스타일 */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            overflow: auto;
-        }
-        .modal-content {
-            margin: auto;
-            display: block;
-            max-width: 90%;
-            max-height: 80vh;
-            position: absolute;
-            top: 45%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        .modal-info {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 15px 20px;
-            border-radius: 8px;
-            max-width: 90%;
-            width: 500px;
-            margin-bottom: 20px;
-        }
-        .modal-title {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #333;
-            text-align: center;
-        }
-        .modal-price-container {
-            display: block;
-            margin: 15px 0;
-            width: 100%;
-            text-align: center;
-        }
-        .price-items {
-            display: inline-block;
-            margin: 0 auto;
-            text-align: center;
-        }
-        .modal-price-container .original-price,
-        .modal-price-container .discount-badge,
-        .modal-price-container .discount-price {
-            display: inline-block;
-            margin: 0 5px;
-        }
-        .modal-price-container .shipping-info {
-            justify-content: center;
-            margin-top: 8px;
-            margin-left: 0;
-            width: 100%;
-        }
-        .modal-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        .navigation-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(255, 255, 255, 0.5);
-            color: #333;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            cursor: pointer;
-            border: none;
-            transition: background-color 0.3s ease;
-        }
-        .navigation-btn:hover {
-            background-color: rgba(255, 255, 255, 0.8);
-        }
-        #prevBtn {
-            left: 20px;
-        }
-        #nextBtn {
-            right: 20px;
-        }
-        .close {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            color: #f1f1f1;
-            font-size: 40px;
-            font-weight: bold;
-            transition: 0.3s;
-            z-index: 1001;
-        }
-        .close:hover,
-        .close:focus {
-            color: #bbb;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        
-        /* 세일 배너 스타일 */
-        .sale-banner {
-            width: 100%;
-            height: 60px;
-            overflow: hidden;
-            background: linear-gradient(45deg, #ff006e, #fb5607, #ffbe0b, #8338ec, #3a86ff, #ff006e);
-            background-size: 400% 400%;
-            animation: gradientMove 3s ease infinite, bannerPulse 1.5s ease-in-out infinite;
-            margin: 20px 0;
-            position: relative;
-            border-radius: 15px;
-            box-shadow:
-                0 0 30px rgba(255, 0, 110, 0.6),
-                0 0 60px rgba(255, 190, 11, 0.4),
-                0 8px 32px rgba(0, 0, 0, 0.3);
-            border: 2px solid rgba(255, 215, 0, 0.6);
-        }
-        @keyframes bannerPulse {
-            0%, 100% { box-shadow: 0 0 30px rgba(255, 0, 110, 0.6), 0 0 60px rgba(255, 190, 11, 0.4); }
-            50% { box-shadow: 0 0 50px rgba(255, 0, 110, 0.9), 0 0 100px rgba(255, 190, 11, 0.7); }
-        }
-
-        .sale-text {
-            white-space: nowrap;
-            font-size: 28px;
-            font-weight: 900;
-            color: white;
-            text-shadow:
-                0 0 10px rgba(255, 255, 255, 0.8),
-                0 0 20px rgba(255, 215, 0, 0.8),
-                2px 2px 4px rgba(0,0,0,0.6);
-            line-height: 60px;
-            animation: marquee 15s linear infinite;
-            position: absolute;
-            top: 0;
-            display: flex;
-            letter-spacing: 2px;
-        }
-        
-        .sale-content {
-            padding-right: 0;
-        }
-        
-        @keyframes marquee {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-        
-        @keyframes gradientMove {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>마뗑킴 옷하고 가방 팔아요</title>
+<link rel="icon" href="./images/cat.ico" type="image/x-icon">
+<meta property="og:image" content="https://hello-matin.r-e.kr/images/cat.png">
+<link rel="stylesheet" href="styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
 </head>
 <body>
-    <div class="container">
-        <h1>Matin Kim</h1>
-        <div class="sale-banner">
-            <div class="sale-text">
-                <span class="sale-content">전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <span class="sale-content">전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp; 전 상품 30% 세일 &nbsp;&nbsp;&nbsp;&nbsp;</span>
-            </div>
-        </div>
-        <div class="product-grid">
-            <!-- 상품 카드들이 JavaScript에 의해 여기에 동적으로 삽입됩니다 -->
-        </div>
-    </div>
 
-    <!-- 이미지 모달 -->
-    <div id="imageModal" class="modal">
-        <span class="close">&times;</span>
-        <button class="navigation-btn" id="prevBtn">&lt;</button>
-        <button class="navigation-btn" id="nextBtn">&gt;</button>
-        <img class="modal-content" id="modalImage">
-        <div class="modal-info" id="modalInfo">
-            <div class="modal-title" id="modalTitle"></div>
-            <div class="modal-price-container" id="modalPriceContainer"></div>
-            <div class="modal-buttons" id="modalButtons"></div>
-        </div>
-    </div>
+<!-- ========== NAV ========== -->
+<nav class="nav">
+  <div class="nav__brand">hello<b>Matin</b>.</div>
+  <div class="nav__links">
+    <a href="#">OUTER</a>
+    <a href="#">TOP</a>
+    <a href="#">DENIM</a>
+    <a href="#">BAG</a>
+    <a href="#">SALE</a>
+  </div>
+  <div class="nav__cart"><span class="dot"></span>CART · 0</div>
+</nav>
 
-    <!-- 외부 스크립트 파일 로드 -->
-    <script src="product_data.js"></script>
-    <script src="product.js"></script>
+<!-- ========== HERO ========== -->
+<section class="hero" data-screen-label="00 Hero">
+  <div class="hero__meta">
+    <span>SS26 / Private Resale</span>
+    <span><b>●</b> 30% OFF · ALL ITEMS</span>
+  </div>
+  <h1 class="hero__title">
+    BUY<br>MATIN.
+    <span class="ko">단 한 벌씩 — 다섯 단계만에 당신 품으로.</span>
+  </h1>
+  <div class="hero__sub">
+    <p class="hero__desc">
+      개인 소장 중인 마뗑킴 제품을 정가 대비 <b style="color:var(--accent)">30% 할인</b>된 가격으로
+      공개합니다. 컬렉션 → 제품 → 컬러 → 사이즈 → 수량, 다섯 번의 선택으로 끝나요.
+      모든 옵션은 오른쪽 아래에 실시간으로 업데이트됩니다.
+    </p>
+    <div class="hero__cta">
+      <a href="#step-1" class="hero__cta-btn">
+        START BUYING <span class="arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PROGRESS ========== -->
+<div class="progress" id="progress">
+  <div class="progress__inner">
+    <div class="progress__step" data-step="1"><span class="num">1</span>Collection</div>
+    <div class="progress__divider"></div>
+    <div class="progress__step" data-step="2"><span class="num">2</span>Product</div>
+    <div class="progress__divider"></div>
+    <div class="progress__step" data-step="3"><span class="num">3</span>Color</div>
+    <div class="progress__divider"></div>
+    <div class="progress__step" data-step="4"><span class="num">4</span>Size</div>
+    <div class="progress__divider"></div>
+    <div class="progress__step" data-step="5"><span class="num">5</span>Quantity</div>
+    <div class="progress__divider"></div>
+    <div class="progress__step" data-step="6"><span class="num">6</span>Review</div>
+  </div>
+</div>
+
+<!-- ========== STEP 1 — COLLECTION ========== -->
+<section class="step" id="step-1" data-screen-label="01 Collection">
+  <div class="step__lead">
+    <div class="step__kicker">Step 01 / Collection</div>
+    <h2 class="step__title">컬렉션을<br><em>고르세요.</em></h2>
+    <p class="step__body">
+      아우터·탑·데님·백 — 네 개의 카테고리 중 오늘 관심 있는 쪽을 먼저 좁혀 주세요.
+      선택한 컬렉션 안의 제품만 다음 단계에 노출됩니다.
+    </p>
+    <div class="step__meta">
+      <span id="collectionTotalMeta"><b>AVAILABLE</b> · — items</span>
+      <span><b>UPDATED</b> · 2026.04.21</span>
+    </div>
+  </div>
+  <div class="collection-grid" id="collectionGrid">
+    <!-- JS -->
+  </div>
+</section>
+
+<!-- ========== STEP 2 — PRODUCT ========== -->
+<section class="step" id="step-2" data-screen-label="02 Product">
+  <div class="step__lead">
+    <div class="step__kicker">Step 02 / Product</div>
+    <h2 class="step__title">어떤 <em>한 벌</em>이<br>필요한가요?</h2>
+    <p class="step__body">
+      선택한 컬렉션의 대표 제품들이에요. 카드를 누르면 컬러 옵션 단계로 이어집니다.
+      "LOW STOCK" 마크는 남은 수량이 1점이라는 뜻이에요.
+    </p>
+    <div class="step__meta">
+      <span id="productMeta1"><b>컬렉션</b> · 먼저 선택해 주세요</span>
+      <span><b>ALL PRICES</b> · 30% 할인 적용가</span>
+    </div>
+  </div>
+  <div class="product-grid" id="productGrid">
+    <!-- JS -->
+  </div>
+</section>
+
+<!-- ========== STEP 3 — COLOR ========== -->
+<section class="step" id="step-3" data-screen-label="03 Color">
+  <div class="step__lead">
+    <div class="step__kicker">Step 03 / Color</div>
+    <h2 class="step__title">컬러는<br><em>어떻게</em>?</h2>
+    <p class="step__body">
+      같은 제품이지만 컬러마다 재고가 달라요. 지금 남아 있는 컬러만 선택 가능합니다.
+    </p>
+    <div class="step__meta">
+      <span id="colorMeta"><b>제품</b> · 선택 필요</span>
+    </div>
+  </div>
+  <div class="option-stack" id="colorList">
+    <!-- JS -->
+  </div>
+</section>
+
+<!-- ========== STEP 4 — SIZE ========== -->
+<section class="step" id="step-4" data-screen-label="04 Size">
+  <div class="step__lead">
+    <div class="step__kicker">Step 04 / Size</div>
+    <h2 class="step__title">사이즈.</h2>
+    <p class="step__body">
+      의류는 S · M · L · FREE 중 재고 있는 옵션만 활성화됩니다.
+      사이즈 가이드가 필요하면 카카오톡으로 문의해 주세요.
+    </p>
+    <div class="step__meta">
+      <span id="sizeMeta"><b>선택 중</b> · —</span>
+    </div>
+  </div>
+  <div class="size-grid" id="sizeGrid">
+    <!-- JS -->
+  </div>
+</section>
+
+<!-- ========== STEP 5 — QUANTITY ========== -->
+<section class="step" id="step-5" data-screen-label="05 Quantity">
+  <div class="step__lead">
+    <div class="step__kicker">Step 05 / Quantity</div>
+    <h2 class="step__title">몇 개<br><em>챙길까요</em>?</h2>
+    <p class="step__body">
+      개인 판매이기 때문에 재고가 한정되어 있어요. 선택한 옵션의 최대 수량을 넘길 수 없습니다.
+    </p>
+    <div class="step__meta">
+      <span id="qtyMeta"><b>재고</b> · —</span>
+    </div>
+  </div>
+  <div class="qty-block">
+    <div class="qty-stepper">
+      <button class="qty-btn" id="qtyMinus">−</button>
+      <div class="qty-display" id="qtyDisplay">1</div>
+      <button class="qty-btn" id="qtyPlus">+</button>
+    </div>
+    <div class="qty-hint">
+      <span class="tag" id="qtyStockTag">남은 재고 —</span>
+      <span>· 직거래 시 택배비 없음</span>
+    </div>
+  </div>
+</section>
+
+<!-- ========== STEP 6 — REVIEW ========== -->
+<section class="step" id="step-6" data-screen-label="06 Review">
+  <div class="step__lead">
+    <div class="step__kicker">Step 06 / Review</div>
+    <h2 class="step__title">마지막으로<br><em>확인</em>하세요.</h2>
+    <p class="step__body">
+      KAKAO 오픈채팅 버튼을 누르면 현재 구성한 옵션이 클립보드에 자동 복사됩니다.
+      채팅방에서 바로 붙여넣어 문의해 주세요. 입금 안내와 배송 방식은 1:1로 드려요.
+    </p>
+    <div class="step__meta">
+      <span><b>결제</b> · 계좌이체 / 카카오페이</span>
+      <span><b>배송</b> · 택배(별도) 또는 직거래(무료)</span>
+    </div>
+  </div>
+  <div class="summary-head">
+    <div class="summary-image" id="summaryImage">
+      <div style="width:100%;height:100%;display:grid;place-items:center;color:var(--muted);font-family:'Space Grotesk';font-size:12px;letter-spacing:0.1em;">PRODUCT IMAGE</div>
+    </div>
+    <div class="summary-details">
+      <div class="summary-row"><span class="summary-row__label">Collection</span><span class="summary-row__value" id="sumCollection">—</span></div>
+      <div class="summary-row"><span class="summary-row__label">Product</span><span class="summary-row__value" id="sumProduct">—</span></div>
+      <div class="summary-row"><span class="summary-row__label">Color</span><span class="summary-row__value" id="sumColor">—</span></div>
+      <div class="summary-row"><span class="summary-row__label">Size</span><span class="summary-row__value" id="sumSize">—</span></div>
+      <div class="summary-row"><span class="summary-row__label">Quantity</span><span class="summary-row__value" id="sumQty">—</span></div>
+      <div class="summary-total">
+        <span class="summary-total__label">TOTAL</span>
+        <span class="summary-total__value" id="sumTotal">₩0<small id="sumOrig">₩0</small></span>
+      </div>
+      <p class="summary-note">
+        · 표기된 금액은 30% 할인이 적용된 가격이며, 최종 금액은 수량 × 단가입니다.<br>
+        · 택배 배송 시 택배비(3,500원~)가 별도 부과됩니다.<br>
+        · 개인 소장품 특성상 택 제거 / 1회 시착 제품이 포함될 수 있어요.
+      </p>
+      <div class="summary-actions">
+        <a class="btn btn--secondary" id="kakaoCta" href="https://open.kakao.com/o/s8Qb36ph" target="_blank" rel="noopener">KAKAO 오픈채팅으로 문의 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="foot">
+  <div>
+    <div class="foot__brand">hello<b>Matin</b>.</div>
+    <p style="margin-top:12px;max-width:42ch;">
+      개인이 소장하던 마뗑킴 제품을 정가 대비 30% 할인하여 판매하는 비상업 페이지입니다.
+      공식 브랜드 웹사이트가 아닙니다.
+    </p>
+  </div>
+  <div>
+    <h4>HELP</h4>
+    <ul>
+      <li>사이즈 가이드</li>
+      <li>결제 방법</li>
+      <li>배송 안내</li>
+      <li>교환 · 환불</li>
+    </ul>
+  </div>
+  <div>
+    <h4>CONTACT</h4>
+    <ul>
+      <li>카카오톡 오픈채팅</li>
+      <li>문자 문의</li>
+      <li>직거래 안내</li>
+    </ul>
+  </div>
+</footer>
+
+<!-- ========== STICKY BOTTOM BAR ========== -->
+<div class="stickybar" id="stickybar">
+  <div class="stickybar__inner">
+    <div class="stickybar__summary">
+      <div class="chip empty" data-chip="collection"><span class="k">Collection</span><span class="v">—</span></div>
+      <div class="chip empty" data-chip="product"><span class="k">Product</span><span class="v">—</span></div>
+      <div class="chip empty" data-chip="color"><span class="k">Color</span><span class="v">—</span></div>
+      <div class="chip empty" data-chip="size"><span class="k">Size</span><span class="v">—</span></div>
+      <div class="chip empty" data-chip="qty"><span class="k">Qty</span><span class="v">—</span></div>
+    </div>
+    <div class="stickybar__price">
+      <span class="k">Total</span>
+      <span class="v" id="stickyTotal">₩0</span>
+    </div>
+    <button class="stickybar__cta" id="stickyCta" disabled>Review →</button>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
 </body>
-</html> 
+</html>
